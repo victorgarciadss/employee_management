@@ -4,48 +4,21 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { useEffect, useState } from 'react';
 import type { Employee } from '../interfaces/Employee';
-import { toast } from 'react-toastify';
 
 
+interface EmployeesTableProps {
+    employees?: Employee[];
+}
 
-export function EmployeesTable() {
+export function EmployeesTable({ employees } : EmployeesTableProps) {
     
-    const [employees, setEmployees] = useState<Employee[]>([]);
-    const token = localStorage.getItem("token");
-
-    async function getEmployees() {
-        try {
-            const response = await fetch("http://localhost:8080/api/employees", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-
-            const data = await response.json();
-            console.log(data);
-
-            if(!response.ok) {
-                toast.error("Erro ao buscar funcionários");
-                console.log(data);
-                return;
-            }
-
-            setEmployees(data);
-
-        }
-        catch (err) {
-            console.log(err);
-        }
+    if(!employees || employees.length === 0) {
+        return (
+            <p className="my-8 text-lg">Nenhum funcionário cadastrado.</p>
+        );
     }
-
-    useEffect(() => {
-        getEmployees();
-    }, []);
-
+    
     return (
         <TableContainer sx={{
             margin: 8,
