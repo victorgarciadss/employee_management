@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import teste.java.employeeManagement.config.TokenService;
 import teste.java.employeeManagement.dtos.request.AuthDTO;
@@ -28,6 +29,19 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email);
+    }
+
+    public void registerUser(UserDTO userDTO) {
+        UserDetails userFounded = userRepository.findByEmail(userDTO.email());
+
+        if(userFounded != null) {
+            throw new IllegalArgumentException("Usuário já cadastrado");
+        }
+
+        String encryptedPassowrd = new BCryptPasswordEncoder().encode(userDTO.password());
+        User newUser = new User(userDTO.name(), userDTO.email(), encryptedPassowrd);
+
+        userRepository.save(newUser);
     }
 
     public UserResponseDTO makeLogin(AuthDTO authDTO, AuthenticationManager manager) {

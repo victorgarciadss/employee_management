@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import teste.java.employeeManagement.dtos.request.AuthDTO;
 import teste.java.employeeManagement.dtos.request.UserDTO;
 import teste.java.employeeManagement.dtos.response.UserResponseDTO;
+import teste.java.employeeManagement.entities.User;
 import teste.java.employeeManagement.services.UserService;
 
 @RestController
@@ -22,6 +23,12 @@ public class UserController {
     public UserController(UserService userService, AuthenticationManager authenticationManager) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody UserDTO userDTO) {
+        userService.registerUser(userDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Uusário registrado com sucesso");
     }
 
     @PostMapping(value = "/auth")
