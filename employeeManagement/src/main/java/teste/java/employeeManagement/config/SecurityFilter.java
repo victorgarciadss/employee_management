@@ -8,9 +8,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import teste.java.employeeManagement.entities.User;
 import teste.java.employeeManagement.repositories.UserRepository;
 
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             if(token != null) {
                 String subject = tokenService.validateToken(token);
-                User user = userRepository.findByEmail(subject).get();
+                UserDetails user = userRepository.findByEmail(subject);
 
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(auth);
