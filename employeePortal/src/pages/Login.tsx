@@ -1,13 +1,42 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export function Login() {
 
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
-    function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+    const navigate = useNavigate();
+
+    async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        console.log({ email, password });
+        
+        try{
+
+            const response = await fetch("http://localhost:8080/api/users/auth", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            
+            if(!response.ok) {
+                const textResp = await response.text();
+                toast.error(textResp);
+                return;
+            }
+
+            const respJson = await response.json();
+            localStorage.setItem("token", respJson.token);
+            navigate("/");
+            
+        }
+        catch(err) {
+            console.log(err);
+        }
     }
 
     return (
