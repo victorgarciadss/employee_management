@@ -25,6 +25,9 @@ public class Employee {
     @Column(nullable = false)
     private String status;
 
+    public Employee() {
+    }
+
     public Employee(Long id, String name, LocalDate admissionDate, Double salary, String status) {
         this.id = id;
         this.name = name;
