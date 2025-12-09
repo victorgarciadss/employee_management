@@ -7,5 +7,5 @@ import teste.java.employeeManagement.entities.User;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String email);
+    UserDetails findByEmail(String email);
 }
