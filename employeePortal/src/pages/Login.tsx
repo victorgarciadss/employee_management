@@ -53,6 +53,7 @@ export function Login() {
                         type="email"
                         name="email"
                         id="email"
+                        required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Digite seu email..."
@@ -66,6 +67,7 @@ export function Login() {
                         type="password"
                         name="password"
                         id="password"
+                        required
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Digite sua senha..."
