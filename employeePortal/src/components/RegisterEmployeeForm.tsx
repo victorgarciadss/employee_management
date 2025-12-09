@@ -84,6 +84,7 @@ export function RegisterEmployeeForm({ onLoadEmployees }: RegisterEmployeeFormPr
                         type="text"
                         id="name"
                         name="name"
+                        required
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Nome..."
@@ -97,6 +98,7 @@ export function RegisterEmployeeForm({ onLoadEmployees }: RegisterEmployeeFormPr
                         type="date"
                         name="admissionDate"
                         id="admissionDate"
+                        required
                         value={admissionDate}
                         onChange={(e) => setAdmissionDate(e.target.value)}
                         className="border p-2 rounded-sm bg-gray-100"
@@ -109,6 +111,7 @@ export function RegisterEmployeeForm({ onLoadEmployees }: RegisterEmployeeFormPr
                         type="number"
                         name="salary"
                         id="salary"
+                        required
                         value={salary}
                         onChange={(e) => setSalary(e.target.value)}
                         placeholder="R$ 0,00"
@@ -121,6 +124,7 @@ export function RegisterEmployeeForm({ onLoadEmployees }: RegisterEmployeeFormPr
                     <select
                         name="status"
                         id="status"
+                        required
                         value={status}
                         onChange={(e) => setStatus(e.target.value as "Ativo" | "Inativo")}
                         className="border p-2 rounded-sm bg-gray-100"
