@@ -6,12 +6,56 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import type { Employee } from '../interfaces/Employee';
 
+import { FaTrashAlt } from "react-icons/fa";
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+
 
 interface EmployeesTableProps {
-    employees?: Employee[];
+    employees: Employee[];
+    deleteEmployee: (id: bigint) => void;
 }
 
-export function EmployeesTable({ employees } : EmployeesTableProps) {
+export function EmployeesTable({ employees, deleteEmployee } : EmployeesTableProps) {
+
+    const navigate = useNavigate();
+    const apiUrl = import.meta.env.VITE_API_URL;
+
+    async function handleDeleteEmployee(id: bigint) {
+
+        const token = localStorage.getItem("token");
+
+        try {
+            const response = await fetch(`${apiUrl}/api/employees/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if(response.status === 200) {
+                const respText = await response.text();
+                deleteEmployee(id);
+                toast.success(respText);
+            }
+            else if(response.status === 401) {
+                const respText = await response.text();
+                toast.error(respText);
+
+                localStorage.removeItem("token");
+                navigate("/login");
+            }
+            else {
+                const respJson = await response.json();
+                throw new Error(respJson.message);
+            }
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
+
     
     if(!employees || employees.length === 0) {
         return (
@@ -23,11 +67,12 @@ export function EmployeesTable({ employees } : EmployeesTableProps) {
         <TableContainer sx={{
             margin: 8,
             display: "flex",
-            justifyContent: "center"
+            justifyContent: "center",
+            maxWidth: "1400px",
+            paddingX: 4
         }}>
             <Table sx={{
                 minWidth: 320,
-                maxWidth: 1000,
                 border: 1
         }}>
             <TableHead>
@@ -37,6 +82,7 @@ export function EmployeesTable({ employees } : EmployeesTableProps) {
                 <TableCell>Data de admissão</TableCell>
                 <TableCell>Salário</TableCell>
                 <TableCell>Status</TableCell>
+                <TableCell>Ações</TableCell>
             </TableRow>
             </TableHead>
             <TableBody>
@@ -50,6 +96,9 @@ export function EmployeesTable({ employees } : EmployeesTableProps) {
                     <TableCell >{new Date(`${employee.admissionDate}T00:00:00`).toLocaleDateString("pt-BR")}</TableCell>
                     <TableCell >{employee.salary.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</TableCell>
                     <TableCell >{employee.status}</TableCell>
+                    <TableCell>
+                        <FaTrashAlt style={{ fontSize: 24, cursor: "pointer" }} onClick={() => handleDeleteEmployee(employee.id)}/>
+                    </TableCell>
                 </TableRow>
             ))}
             </TableBody>

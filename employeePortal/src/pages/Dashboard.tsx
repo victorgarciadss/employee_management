@@ -15,6 +15,10 @@ export function Dashboard() {
 
     const apiUrl = import.meta.env.VITE_API_URL;
 
+    function deleteEmployee(id: bigint) {
+        setEmployees(prev => prev.filter(employee => employee.id !== id));
+    }
+
     async function getEmployees() {
         try {
             const response = await fetch(`${apiUrl}/api/employees`, {
@@ -61,7 +65,7 @@ export function Dashboard() {
                 <h2 className="text-2xl font-semibold">Lista de funcionários</h2>
             </section>
             
-            <EmployeesTable employees={employees} />
+            <EmployeesTable employees={employees} deleteEmployee={deleteEmployee} />
 
             <RegisterEmployeeForm onLoadEmployees={getEmployees} />
         </main>
