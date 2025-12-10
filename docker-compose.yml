@@ -34,5 +34,17 @@ services:
       db:
         condition: service_healthy
 
+  frontend:
+    build:
+      context: ./employeePortal
+      dockerfile: Dockerfile
+    container_name: employee_management_frontend
+    ports:
+      - "4173:4173"
+    environment:
+      - VITE_API_URL=http://localhost:8081
+    depends_on:
+      - backend
+
 volumes:
   db_data:
