@@ -32,4 +32,10 @@ public class EmployeeController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Novo funcionário cadastrado com sucesso!");
     }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable("id") Long id) {
+        employeeService.deleteEmployee(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Funcionário excluido com sucesso!");
+    }
 }

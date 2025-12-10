@@ -7,6 +7,7 @@ import teste.java.employeeManagement.entities.Employee;
 import teste.java.employeeManagement.repositories.EmployeeRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class EmployeeService {
@@ -31,5 +32,12 @@ public class EmployeeService {
         employee.setStatus(employeeDTO.status());
 
         employeeRepository.save(employee);
+    }
+
+    public void deleteEmployee(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Funcionário não encontrado!"));
+
+        employeeRepository.deleteById(id);
     }
 }
