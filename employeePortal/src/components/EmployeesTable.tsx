@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import type { Employee } from '../interfaces/Employee';
 
-import { FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
@@ -96,8 +96,9 @@ export function EmployeesTable({ employees, deleteEmployee } : EmployeesTablePro
                     <TableCell >{new Date(`${employee.admissionDate}T00:00:00`).toLocaleDateString("pt-BR")}</TableCell>
                     <TableCell >{employee.salary.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</TableCell>
                     <TableCell >{employee.status}</TableCell>
-                    <TableCell>
-                        <FaTrashAlt style={{ fontSize: 24, cursor: "pointer" }} onClick={() => handleDeleteEmployee(employee.id)}/>
+                    <TableCell style={{ display: "flex", gap: 16 }}>
+                        <FaEdit style={{ fontSize: 24, cursor: "pointer" }} onClick={() => navigate(`/edit`, { state: { employee } })}/>
+                        <FaTrashAlt style={{ fontSize: 24, cursor: "pointer" }} onClick={() => handleDeleteEmployee(employee.id)}/> 
                     </TableCell>
                 </TableRow>
             ))}
