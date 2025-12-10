@@ -4,11 +4,14 @@ import { Header } from "../components/Header";
 import { RegisterEmployeeForm } from "../components/RegisterEmployeeForm";
 import type { Employee } from "../interfaces/Employee";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export function Dashboard() {
 
     const [employees, setEmployees] = useState<Employee[]>([]);
     const token = localStorage.getItem("token");
+
+    const navigate = useNavigate();
 
     const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -22,17 +25,24 @@ export function Dashboard() {
                 }
             });
 
-            const data = await response.json();
-            console.log(data);
+            if(response.status === 200) {
+                const data = await response.json();
+                setEmployees(data);
+            }
+            else if(response.status === 401) {
+                const respText = await response.text();
+                toast.error(respText);
+                console.log(respText);
 
-            if(!response.ok) {
-                toast.error("Erro ao buscar funcionários");
-                console.log(data);
+                localStorage.removeItem("token");
+                navigate("/login");
+
                 return;
             }
-
-            setEmployees(data);
-
+            else {
+                const respJson = await response.json();
+                throw new Error(respJson.message);
+            }
         }
         catch (err) {
             console.log(err);
