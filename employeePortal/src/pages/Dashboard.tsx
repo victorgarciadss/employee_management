@@ -10,9 +10,11 @@ export function Dashboard() {
     const [employees, setEmployees] = useState<Employee[]>([]);
     const token = localStorage.getItem("token");
 
+    const apiUrl = import.meta.env.VITE_API_URL;
+
     async function getEmployees() {
         try {
-            const response = await fetch("http://localhost:8080/api/employees", {
+            const response = await fetch(`${apiUrl}/api/employees`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

@@ -9,12 +9,14 @@ export function Login() {
 
     const navigate = useNavigate();
 
+    const apiUrl = import.meta.env.VITE_API_URL;
+
     async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         
         try{
 
-            const response = await fetch("http://localhost:8080/api/users/auth", {
+            const response = await fetch(`${apiUrl}/api/users/auth`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

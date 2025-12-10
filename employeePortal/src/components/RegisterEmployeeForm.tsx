@@ -16,6 +16,8 @@ export function RegisterEmployeeForm({ onLoadEmployees }: RegisterEmployeeFormPr
 
     const navigate = useNavigate();
 
+    const apiUrl = import.meta.env.VITE_API_URL;
+
     function cleanForm() {
         setName("");
         setAdmissionDate("");
@@ -30,7 +32,7 @@ export function RegisterEmployeeForm({ onLoadEmployees }: RegisterEmployeeFormPr
         const token = localStorage.getItem("token");
 
         try {
-            const response = await fetch("http://localhost:8080/api/employees/register", {
+            const response = await fetch(`${apiUrl}/api/employees/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
