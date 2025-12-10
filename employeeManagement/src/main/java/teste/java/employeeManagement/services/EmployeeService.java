@@ -34,6 +34,19 @@ public class EmployeeService {
         employeeRepository.save(employee);
     }
 
+    @Transactional
+    public Employee updateEmployee(Long id, EmployeeDTO employeeDTO) {
+        Employee employeeFounded = employeeRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("Funcionário não encontrado"));
+
+        employeeFounded.setName(employeeDTO.name());
+        employeeFounded.setAdmissionDate(employeeDTO.admissionDate());
+        employeeFounded.setSalary(employeeDTO.salary());
+        employeeFounded.setStatus(employeeDTO.status());
+
+        return employeeRepository.save(employeeFounded);
+    }
+
     public void deleteEmployee(Long id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Funcionário não encontrado!"));
